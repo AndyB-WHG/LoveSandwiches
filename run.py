@@ -57,17 +57,6 @@ def validate_data(values):
     return True
 
 
-def update_sales_worksheet(data):
-    """
-    Update sales worksheet with the input from the user.
-    Add new row with the list data provided.
-    """
-    print("updating sales worksheet...\n")
-    sales_worksheet = SHEET.worksheet("sales")
-    sales_worksheet.append_row(data)
-    print("Sales data updated successfully.\n")
-
-
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
@@ -75,7 +64,7 @@ def calculate_surplus_data(sales_row):
     - Positive surplus indicates waste
     - Negative surplus indicates extra made when stock was sold out.
     """
-    print("Calculating suplus data...\n")
+    print("Calculating surplus data...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     stock_row = stock[-1]
     
@@ -87,15 +76,26 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
+def update_worksheet(data, worksheet):
+    """
+    Receives a list of integers and appends them to the appropriate
+    worksheet.
+    """
+    print(f"Updating {worksheet} data...\n")
+    surplus_worksheet = SHEET.worksheet(worksheet)
+    surplus_worksheet.append_row(data)
+    print(f"{worksheet} data updated successfully.\n")
+
+
 def main():
     """
     Run all program functions
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data]
-    update_sales_worksheet(sales_data)
+    update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
+    update_worksheet(new_surplus_data, "surplus")
 
 
 print("Welcome to Love Sandwiches Data Automation")
