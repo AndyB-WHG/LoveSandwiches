@@ -22,7 +22,7 @@ def get_sales_data():
     by commas. The loop will repeatedly request data until it is valid.
     """
     while True:
-        print ("Please enter sales data from the last market.")
+        print("Please enter sales data from the last market.")
         print("Data should be six numbers, separated by commas.")
         print("Example: 10,20,30,40,50,60\n")
 
@@ -108,6 +108,7 @@ def calculate_stock_data(last_5_days_data):
     """
     Take last five days sales data and find the average for each sandwich, adding 10%.
     """
+    print(last_5_days_data)
     print("Calculating stock data...\n")
     new_stock_data = []
 
@@ -131,11 +132,24 @@ def main():
     update_worksheet(new_surplus_data, "surplus")
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
-    print(stock_data)
     update_worksheet(stock_data, "stock")
+    return stock_data
 
 
 print("Welcome to Love Sandwiches Data Automation")
 
 
-main()
+stock_data = main()
+
+
+def get_stock_values(data):
+    headings = SHEET.worksheet("stock").row_values(1)
+    stock_dict = dict.fromkeys(headings, "")
+    for int in range(len(headings)):
+        stock_dict[headings[int-1]] = data[int-1]
+    print("Please make the following number of sandwiches for today's market: \n")
+    return stock_dict
+
+
+stock_values = get_stock_values(stock_data)
+print(stock_values)
